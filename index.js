@@ -3,7 +3,7 @@ var fs      = require('fs');
 var cheerio = require('cheerio');
 var request = Promise.promisifyAll(require("request"));
 
-if(!fs.existsSync('pics/')){  
+if(!fs.existsSync('pics/')){
   fs.mkdirSync('pics/');
 }
 
@@ -29,10 +29,9 @@ findPageLinks().each(function (pageLink) {
   }).each(function (link) {
     var fileName = link.substring( link.lastIndexOf('/') + 1, link.length );
     var file = 'pics/' + fileName;
-    request(link).pipe(fs.createWriteStream(file))
-      .on('error', function(err) {
-        console.log(err)
-      });
+    request(link).on('error', function(err) {
+      console.log(err)
+    }).pipe(fs.createWriteStream(file));
   });
 });
 
@@ -57,7 +56,7 @@ function findPageLinks() {
   });
 }
 
-function logger ( msg ) {  
+function logger ( msg ) {
   process.stdout.clearLine();  // clear current text
   process.stdout.cursorTo(0);  // move cursor to beginning of line
   process.stdout.write(msg);
